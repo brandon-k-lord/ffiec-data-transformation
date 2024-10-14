@@ -1,0 +1,15 @@
+services:
+  postgres-db:
+    image: postgres
+    ports:
+      - 5444:5432
+    environment:
+      POSTGRES_USER: ${DB_USRNM}
+      POSTGRES_PASSWORD: ${DB_PWD}
+      POSTGRES_DB: ${DB_NAME}
+  ffiec-institutions:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres-db

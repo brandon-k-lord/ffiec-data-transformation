@@ -1,0 +1,58 @@
+STATE,STATEFP,STATENS,STATE_NAME
+AL,1,1779775,Alabama
+AK,2,1785533,Alaska
+AZ,4,1779777,Arizona
+AR,5,68085,Arkansas
+CA,6,1779778,California
+CO,8,1779779,Colorado
+CT,9,1779780,Connecticut
+DE,10,1779781,Delaware
+DC,11,1702382,District of Columbia
+FL,12,294478,Florida
+GA,13,1705317,Georgia
+HI,15,1779782,Hawaii
+ID,16,1779783,Idaho
+IL,17,1779784,Illinois
+IN,18,448508,Indiana
+IA,19,1779785,Iowa
+KS,20,481813,Kansas
+KY,21,1779786,Kentucky
+LA,22,1629543,Louisiana
+ME,23,1779787,Maine
+MD,24,1714934,Maryland
+MA,25,606926,Massachusetts
+MI,26,1779789,Michigan
+MN,27,662849,Minnesota
+MS,28,1779790,Mississippi
+MO,29,1779791,Missouri
+MT,30,767982,Montana
+NE,31,1779792,Nebraska
+NV,32,1779793,Nevada
+NH,33,1779794,New Hampshire
+NJ,34,1779795,New Jersey
+NM,35,897535,New Mexico
+NY,36,1779796,New York
+NC,37,1027616,North Carolina
+ND,38,1779797,North Dakota
+OH,39,1085497,Ohio
+OK,40,1102857,Oklahoma
+OR,41,1155107,Oregon
+PA,42,1779798,Pennsylvania
+RI,44,1219835,Rhode Island
+SC,45,1779799,South Carolina
+SD,46,1785534,South Dakota
+TN,47,1325873,Tennessee
+TX,48,1779801,Texas
+UT,49,1455989,Utah
+VT,50,1779802,Vermont
+VA,51,1779803,Virginia
+WA,53,1779804,Washington
+WV,54,1779805,West Virginia
+WI,55,1779806,Wisconsin
+WY,56,1779807,Wyoming
+AS,60,1802701,American Samoa
+GU,66,1802705,Guam
+MP,69,1779809,Commonwealth of the Northern Mariana Islands
+PR,72,1779808,Puerto Rico
+UM,74,1878752,U.S. Minor Outlying Islands
+VI,78,1802710,United States Virgin Islands

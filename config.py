@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 
 
+# assumes ".env" file exists
 class Settings(BaseSettings):
     db_driver: str
     db_usrnm: str

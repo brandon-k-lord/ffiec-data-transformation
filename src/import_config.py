@@ -14,13 +14,21 @@ class ImportConfig:
         pass
 
     def import_configuration(self, directory: str, config: dict) -> dict:
-        """main purpose is to add {file: filepath} to FFIEC_FI_IMPORT json for execution purposes"""
+        """
+        Configures import JSON dynamically with {file: file_path}
+        Immports and scripts are structured differently
+
+        Parameters:
+        - directory: directory path
+        - config: Import JSON
+        """
 
         import_dir = FileHandlers.file_directory(directory=directory)
         import_list = FileHandlers.file_list(directory=import_dir)
 
         for key, value in config.items():
-            logger.info(print(value["key_type"]))
+            # comparing file name to key, dynamically add file path based on comparison conditions
+            # mixture of statically named files and dynamically named that include date naming convention e.g., bhcf20240630
             if value["key_type"] == "prefix":
                 for _key, _value in import_list.items():
                     if key == _key[:4]:
@@ -28,6 +36,7 @@ class ImportConfig:
             for _key, _value in import_list.items():
                 if key == _key:
                     value["file"] = _value
+
         logger.info(
             f"service: import_configuration  |  config: {pprint.pformat(config)}"
         )
@@ -35,6 +44,14 @@ class ImportConfig:
         return config
 
     def script_configuration(self, directory: str, config: dict) -> dict:
+        """
+        Configures import JSON dynamically with {file: file_path}
+        Immports and scripts are structured differently
+
+        Parameters:
+        - directory: directory path
+        - config: Script JSON
+        """
         script_directory = FileHandlers.file_directory(directory=directory)
         files = os.listdir(path=script_directory)
         logger.info(script_directory)
@@ -52,7 +69,13 @@ class ImportConfig:
                     value["file"] = _value
 
     def intit_scripts(self, engine: object, config: dict):
+        """
+        Facilitates script execution based on configurations
 
+        Parameters:
+        - engine: connection
+        - config: Script JSON
+        """
         for value in config["scripts"]:
             script = value["file"]
             allow_exe = value["allow_exe"]
@@ -63,7 +86,13 @@ class ImportConfig:
                 script_runner(engine=engine, script=script)
 
     def init_import(self, engine: object, config: dict):
-        """top level function is intended to be called in main to orchestrate load process"""
+        """
+        Facilitates import based on configurations
+
+        Parameters:
+        - engine: connection
+        - config: Import JSON
+        """
         for key, value in config.items():
             file = value["file"]
             logger.info(file)
@@ -71,7 +100,6 @@ class ImportConfig:
             table_name = value["table_name"]
             if_exists = value["if_exists"]
             sep = value["sep"]
-            # load_type = value["load_type"]
             cols = value["cols"]
             allow_import = value["allow_import"]
 
@@ -82,7 +110,6 @@ class ImportConfig:
                 table_name=table_name,
                 if_exists=if_exists,
                 sep=sep,
-                # load_type=load_type,
                 cols=cols,
                 allow_import=allow_import,
             )

@@ -10,6 +10,16 @@ JSON acts as configuration mechanism for the loading of csvs in the import folde
 If `allow_import` set to false, it will be skipped in the load process.
 
 Note: I would prefer this to be table driven but for simplicity we are defining all the conditions in the code.
+
+Keys:
+- key_type: Signals how the filename will be compared with key; prefix == partial comparision for date naming convention; full == as is comparison
+- table_schema: Name of target table schema
+- table_name: Name of target table to be created if not exists
+- if_exists: Action to take if table exists
+- sep: Seperator for reading file e.g., ",", "^"
+- allow_import: Boolean flag for allowing file to be imported
+- cols: List of column names, restricts import to specified list, if empty, import full list
+
 """
 FFIEC_BHCF_IMPORT = {
     "bhcf": {
@@ -79,7 +89,7 @@ FFIEC_FI_IMPORT = {
         "table_name": "tmp_naics",
         "if_exists": "replace",
         "sep": ",",
-        "load_type": "partial",
+        "allow_import": True,
         "cols": [],
     },
     "csv_relationships": {
@@ -116,6 +126,11 @@ PREFLIGHT
 Drops potential duplicated data in case stopped mid proces and rebooted.
 Due to how pandas is `appending` data instead of `failing` or `replacing`.
 This was done for simplicity since all of the csv_attribute files are the same data structure.
+
+Keys:
+- filename: key for file comparision
+- description: informational
+- allow_exe: boolean flag for allowing file to be executed
 """
 SCRIPTS_PREFLIGHT = {
     "scripts": [

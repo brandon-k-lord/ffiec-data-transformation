@@ -7,7 +7,11 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 
 def script_runner(engine: object, script: str):
-
+    """
+    Parameters:
+    - engine: Connection
+    - script: Executable
+    """
     with open(script, "r") as file:
         sql_script = file.read()
 

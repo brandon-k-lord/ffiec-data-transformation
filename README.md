@@ -362,7 +362,7 @@ The data are broken down into three files based on the status of the institution
 
 ### Data Dictionairies
 
-- **NPW Data Dictionary**: Provides context for FFIEC attributes, relationships, and transformations.
+- [**NPW Data Dictionary**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/documents/NPW%20Data%20Dictionary.pdf): Provides context for FFIEC attributes, relationships, and transformations.
 - **Financial Download Dictionary**: Provides context for BHCF data.
 
 ---
@@ -451,25 +451,25 @@ SQL showcasing the transformation of the dataset can be found in `./scripts`. Th
 
 ### Script Files
 
-- **001_preflight**: Fail safe to remove potential conflict, in the event load process is interuptted and then rexecuted.
-- **002_functions**: Creates functions required for cleaning data.
-- **003_tables**: Creation of production tables.
-- **004_tmp_tables**: Creation of temporary table for isolating data transformation.
-- **005_attributes_inst**: Tranforms data targeting `institutions`.
-- **006_attributes_ids**: Tranforms data targeting `inst_ids`.
-- **007_attributes_dates**: Tranforms data targeting `inst_attr_dates`.
-- **008_attributes_inds**: Tranforms data targeting `inst_attr_indicators.
-- **009_attributes_codes**: Tranforms data targeting `inst_attr_cds`.
-- **010_attributes_load**: Loads all transformed data sourced from attributes.
-- **011_relationships**: Transforms data targeting `inst_relationships`.
-- **012_relationships_load**: Loads tranformed data to `inst_relationships`.
-- **013_transformations**: Transforms and load data to `inst_transformations`.
-- **014_inst_addresses_load**: Transforms and loads data to `inst_addresses`.
-- **015_fips_load**: Transforms and loads data to `country_cds`, `state_cds`, and `country_cds`.
-- **016_naics**: Transforms and load data to `naics`.
-- **017_call_reports**: Transforms and loads data to `call_reports`.
-- **099_cleanup**: Post deployment script for dropping all temporary tables and functions.
-- **100_drop_all_tables**: Scritps for removing all tables.
+- [**001_preflight**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/001_preflight.sql): Fail safe to remove potential conflict, in the event load process is interuptted and then rexecuted.
+- [**002_functions**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/002_functions.sql): Creates functions required for cleaning data.
+- [**003_tables**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/003_tables.sql): Creation of production tables.
+- [**004_tmp_tables**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/004_tmp_tables.sql): Creation of temporary table for isolating data transformation.
+- [**005_attributes_inst**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/005_attributes_inst.sql): Tranforms data targeting `institutions`.
+- [**006_attributes_ids**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/006_attributes_ids.sql): Tranforms data targeting `inst_ids`.
+- [**007_attributes_dates**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/007_attributes_dates.sql): Tranforms data targeting `inst_attr_dates`.
+- [**008_attributes_inds**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/008_attributes_inds.sql): Tranforms data targeting `inst_attr_indicators.
+- [**009_attributes_codes**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/009_attributes_codes.sql): Tranforms data targeting `inst_attr_cds`.
+- [**010_attributes_load**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/010_attributes_load.sql): Loads all transformed data sourced from attributes.
+- [**011_relationships**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/011_relationships.sql): Transforms data targeting `inst_relationships`.
+- [**012_relationships_load**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/012_relationships_load.sql): Loads tranformed data to `inst_relationships`.
+- [**013_transformations**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/013_transformations.sql): Transforms and load data to `inst_transformations`.
+- [**014_inst_addresses_load**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/014_inst_addresses_load.sql): Transforms and loads data to `inst_addresses`.
+- [**015_fips_load**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/015_fips_load.sql): Transforms and loads data to `country_cds`, `state_cds`, and `country_cds`.
+- [**016_naics**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/016_naics.sql): Transforms and load data to `naics`.
+- [**017_call_reports**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/017_call_reports.sql): Transforms and loads data to `call_reports`.
+- [**099_cleanup**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/099_cleanup.sql): Post deployment script for dropping all temporary tables and functions.
+- [**100_drop_all_tables**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/scripts/100_drop_all_tables.sql): Scritps for removing all tables.
 
 ---
 

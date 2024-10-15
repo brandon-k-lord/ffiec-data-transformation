@@ -363,7 +363,7 @@ The data are broken down into three files based on the status of the institution
 ### Data Dictionairies
 
 - [**NPW Data Dictionary**](https://github.com/i-am-bl/ffiec-data-transformation/blob/main/documents/NPW%20Data%20Dictionary.pdf): Provides context for FFIEC attributes, relationships, and transformations.
-- **Financial Download Dictionary**: Provides context for BHCF data.
+- [**Financial Download Dictionary**](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fi-am-bl%2Fffiec-data-transformation%2Frefs%2Fheads%2Fmain%2Fdocuments%2FFinancial_Download_Dictionary.xlsx&wdOrigin=BROWSELINK): Provides context for BHCF data.
 
 ---
 

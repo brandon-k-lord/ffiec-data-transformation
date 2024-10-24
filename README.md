@@ -29,7 +29,8 @@
   - [Solution](#solution)
     - [Vision of Scope](#vision-of-scope)
     - [High Level Stories](#high-level-stories)
-    - [High Level Requirements](#high-level-requirements)
+    - [KPIs (Key Performance Indicators)](#kpis-key-performance-indicators)
+    - [High Level Acceptance Criteria](#high-level-acceptance-criteria)
     - [Strategic Direction](#strategic-direction)
     - [Technologies](#technologies)
     - [Out of Scope](#out-of-scope)
@@ -117,7 +118,7 @@ Primarily focusing on SQL acumen in this project, demonstrations include the fol
 
 ### Environment Variables
 
-This project is dependent upon a number of environment variables being set.
+This project is dependent upon several environment variables being set.
 
 #### Setting Environment Variables
 
@@ -138,7 +139,7 @@ This project is dependent upon a number of environment variables being set.
 
 ### Docker Installation
 
-This project was developed in Docker. If you do not have Docker installed locally or if you have not used Docker before, please refer to the following link.
+This project was developed using Docker. If you do not have Docker installed locally or if you have not used Docker before, please refer to the following link.
 
 [Install Docker](https://docs.docker.com/engine/install/)
 
@@ -179,7 +180,7 @@ To segment, total assets must be analyzed on a more granular level. Some subsect
 
 Let us assume that the reason for targeting an FI is to offer products and services to support commercial lending activities. The following example is intended to provide further context.
 
-> **Example**: On average, a [Credit Union (CU)](#customers) reports an 80/20 portfolio mixture compared to the average 50/50 reported by a [Community Bank (CB)](#customers). For example, a CU reporting $4B in total assets, which a relatively larger institution, may only have $800MM in assets for their commercial portfolio.
+> **Example**: On average, a [Credit Union (CU)](#customers) reports an 80/20 portfolio mixture compared to the average 50/50 reported by a [Community Bank (CB)](#customers). For example, a CU reporting $4B in total assets, which is a relatively larger institution, may only have $800MM in assets for their commercial portfolio.
 
 On the balance sheet, consumer and commercial assets are subtotals of more granuarly reported assets. Proper segmentation of an FI, requires analysis of these assets.
 
@@ -270,11 +271,18 @@ As a Product Manager, I want my team to be empowered to analyze market trends by
 
 As the Marketing Director, I want to increase the click through rate of campaigns. I have a list of contacts and that are targeted for marketing campaigns. Currently all contacts get the same messaging, equating to a poor click through rate. I would like to segment to increase click through rates. To increase click-through rates, a deeper analysis of lending products offered by FIs in our TAM is needed.
 
-As a Sales Consultant, I want to increase the focus of the sales campaign by aligning with marketing segmentation to sell product and services more effectively.
+As a Sales Consultant, I want to increase the focus of the sales campaign by aligning with marketing segmentation to sell products and services more effectively.
 
 ---
 
-### High Level Requirements
+### KPIs (Key Performance Indicators)
+
+- Time spent gathering data to analyze.
+- Segmenation of the market.
+
+---
+
+### High Level Acceptance Criteria
 
 1. Centralize and store FFIEC quarterly reported call reports.
 2. Implementation must provide flexibility for further extensions for the centralizing of competitive research, marketing, and sales information.
@@ -306,7 +314,7 @@ TThe following technologies were chosen due to their current use and implementat
 
 ### Out of Scope
 
-This section describes items that is not essential to realize immediate value to maintain focus on a quick deliverable. Items listed will be revisited for future iterations.
+This section describes items that are not essential to realize immediate value to maintain focus on a quick deliverable. Items listed will be revisited for future iterations.
 
 - **Web Scraping**:\
   Call reports are refreshed quarterly, and FI data is refreshed daily. An automated refresh is not needed currently.
@@ -373,7 +381,7 @@ The data are broken down into three files based on the status of the institution
 
 Code can be executed with `main.py`.
 
-CSV import and script execution is configured by JSONs found in `./src/constants`. All configurations except the file path, which is dynamically added during code execution, can be modified in the JSON. A table driven solution would provide a more scalable solution but was not demonstrated due to the added complexity.
+CSV import and script execution is configured by JSONs found in `./src/constants`. All configurations except the file path, which is dynamically added during code execution, can be modified in the JSON. A table-driven solution would provide a more scalable solution but was not demonstrated due to the added complexity.
 
 ---
 
@@ -385,7 +393,7 @@ Analyst remained conservative in implementation. Requirements stated a need for 
 
 ### FI Attributes
 
-Attributes was delivered in three forms: active, branches, and closed. The data structure was the design and appeared to be split for the purpose of simplicity for the audience. This data was combined into one entity which equated to approximately 400k records.
+Attributes were delivered in three forms: active, branches, and closed. The data structure was the design and appeared to be split for the purpose of simplicity for the audience. This data was combined into one entity which equated to approximately 400k records.
 
 Closed institutions were included by analyst due to assumed relevance for identifying market trends for institution closure. It is assumed there is potential correlation between economic indicators, institution size, and geographic location.
 
@@ -403,7 +411,7 @@ Inapplicable values were set to null from 0 and whitespace were removed.
 
 ### FI Relationships
 
-Relationships were delievered in one form and was included by analyst due to assumed relevance. Data includes historical records for the relationship lifecycles between institutions. Due to label encoding, additional columns were added for ease of use. Data was not divided into addtional entities at this time.
+Relationships were delivered in one form and was included by analyst due to assumed relevance. Data includes historical records for the relationship lifecycles between institutions. Due to label encoding, additional columns were added for ease of use. Data was not divided into addtional entities at this time.
 
 This entity can be found as `inst_relationships`.
 
@@ -411,7 +419,7 @@ This entity can be found as `inst_relationships`.
 
 ### FI Transformations
 
-Transformations were delivered in one form and was included by analyst due to assume relevance. Data included historical records documenting institution transistion. Analyst assumed relevance due to the nature of historical information documenting the discontinuation or transition of charters. Trends identified can provide market indicators that are pertitent for developing a forward-looking market strategy.
+Transformations were delivered in one form and were included by analyst due to assume relevance. Data included historical records documenting institution transition. Analyst assumed relevance due to the nature of historical information documenting the discontinuation or transition of charters. Trends identified can provide market indicators that are pertitent for developing a forward-looking market strategy.
 
 This entity can be found as `inst_transformations`.
 
@@ -445,7 +453,7 @@ Analyst obtained call report from FFIEC. Insufficient details were provided at t
 
 ### Transformation Summary
 
-SQL showcasing the transformation of the dataset can be found in `./scripts`. This section offers a brief summary.
+SQL showcasing the transformation of the dataset can be found in `./scripts`. This section offers a summary.
 
 ---
 
@@ -475,7 +483,7 @@ SQL showcasing the transformation of the dataset can be found in `./scripts`. Th
 
 ### SQL Examples
 
-This section highlights more advanced SQL applied in this project and is not a comprehesive explanation of all SQL. Script files include comments and all SQL used in this project.
+This section highlights more advanced SQL applied in this project and is not a comprehensive explanation of all SQL. Script files include comments, and all SQL used in this project.
 
 #### Functions
 
@@ -533,7 +541,7 @@ $$ language plpgsql;
 
 #### Insert Select Where not Exists
 
-Insert features a select from clause with a where not exist clause. The where clause executes a sub query on the target table, not allowing for an insert to be made where record already exists in the target table.
+Insert features a select from clause with a where not exist clause. The `where` clause executes a sub query on the target table, not allowing for an insert to be made where record already exists in the target table.
 
 ```sql
 insert into call_reports(rssd_id, reporting_pd, tot_assets)
@@ -569,11 +577,11 @@ Analysis is limited by available data. Data was intentionally restricted to limi
 
 ### Institution Branches
 
-By reviewing both count and location of branches, an assessment could be made of the FI's footprint in the market. With the use of window functions, a list can of institutions can be generated with a running total of branches.
+By reviewing both the count and location of branches, an assessment could be made of the FI's footprint in the market. With the use of window functions, a list of institutions can be generated with a running total of branches.
 
 ```sql
 /*
-By self joining on the institutions table, we can partition to provide an output that produces a running count to quickly see how many branches an FI has.
+By self-joining on the institutions table, we can partition to provide an output that produces a running count to quickly see how many branches an FI has.
 */
 
 select i.rssd_id,i."name" head_office, ii."name" branch, row_number() over (partition by i."name" order by i."name", ii."name") branch_number
@@ -593,7 +601,7 @@ limit 5;
 
 ### FFIEC Assets
 
-To performe a trend analysis, a minimum of three years is required. This is just a quick demonstration of the efforts to ingest fiscal information.
+To perform a trend analysis, a minimum of three years is required. This is just a quick demonstration of the efforts to ingest fiscal information.
 
 > **Please Note**: Total assts is reported in thousands (M)
 
@@ -601,7 +609,6 @@ To performe a trend analysis, a minimum of three years is required. This is just
 select i."name" , i.entity_type , to_char(cr.tot_assets, 'FM$0,000,000') tot_assets_m, cr.reporting_pd
 from institutions i
 join call_reports cr  on i.rssd_id = cr.rssd_id and cr.tot_assets is not null limit 5;
-
 
  name               | entity_type                     | tot_assets_m | reporting_pd |
 --------------------+---------------------------------+--------------+--------------+
@@ -614,11 +621,11 @@ join call_reports cr  on i.rssd_id = cr.rssd_id and cr.tot_assets is not null li
 
 ### Transformation Trends
 
-Discontinued Charters for M&A (Merger & Aquisition) has significantly declined per year. A four year average for the most recent four years were taken for comparison with the average of the previous four years. The most recent four year average is down approximately 30% at 497 from 734 per year. This comparison was made due to the most recent unprecedented economic impact that is the lagging effects of inflation, montary policy restrictions, and COVID-19.
+Discontinued Charters for M&A (Merger & Acquisition) has significantly declined per year. A four-year average for the most recent four years was taken for comparison with the average of the previous four years. The most recent four-year average is down approximately 30% at 497 from 734 per year. This comparison was made due to the most recent unprecedented economic impact that is the lagging effects of inflation, montary policy restrictions, and COVID-19.
 
-The year over year change reflects a decline at a decreasing rate. This is a potential indicator that the market is approaching equilibrium in this recession.
+The year-over-year change reflects a decline at a decreasing rate. This is a potential indicator that the market is approaching equilibrium in this recession.
 
-> **Please Note**: Analyst annualized 2024 uisng the straight growth rate method for comparison purposes.
+> **Please Note**: Analyst annualized 2024 using the straight growth rate method for comparison purposes.
 
 ```sql
 /*
@@ -652,7 +659,6 @@ t.ct_2023"2023", t.ct_2023-t.ct_2022 chg22,
 t.ct_2022"2022", t.ct_2022-t.ct_2021 chg21,
 t.ct_2021"2021"
 from trends t cross join averages a where t.transformation = 'Charter Discontinued';
-
 
  avg_24_21 | avg_20_17 | ... | 2024 | chg23 | 2023 | chg22 | 2022 | chg21 | 2021 |
 -----------+-----------+-----+------+-------+------+-------+------+-------+------+

@@ -77,13 +77,3 @@ class ImportContainer:
             configs=self._config.gov_identifier_imports(),
             engine=self._engine,
         )
-
-    def fi_import(self) -> None:
-        """
-        Executes the Financial Institution (FI) import process.
-        Uses the configurations provided by `fi_import_configs` from the config container.
-        """
-        return self._import_handler.import_handler(
-            configs=self._config.fi_import_configs(),
-            engine=self._engine,
-        )

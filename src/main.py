@@ -1,4 +1,6 @@
-from .registery import import_registery
+from .containers.containers import dependency_container
 
 if __name__ == "__main__":
-    import_registery()
+    dependencies = dependency_container()
+    workers = dependencies.registery()
+    workers.process_registery()

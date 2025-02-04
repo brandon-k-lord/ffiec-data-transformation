@@ -46,8 +46,8 @@ class ScriptHandler:
                 - allow_exe (bool): Flag to determine if the script should be executed.
         """
         for config in configs:
-            script = config["file"]
-            allow_exe = config["allow_exe"]
+            script = config.get("file")
+            allow_exe = config.get("allow_exe", False)
             if allow_exe:
                 logger.info(f"service: init_scripts | executing file: {script}")
                 cls._script_runner(engine=engine, script=script)

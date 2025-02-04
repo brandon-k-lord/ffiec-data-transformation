@@ -88,22 +88,13 @@ class ImportHandler:
         - config: Import JSON
         """
         for config in configs:
-            file = config["file"]
-            logger.info(file)
-            table_schema = config["table_schema"]
-            table_name = config["table_name"]
-            if_exists = config["if_exists"]
-            sep = config["sep"]
-            cols = config["cols"]
-            allow_import = config["allow_import"]
-
             cls.to_sql_handler(
                 engine=engine,
-                file=file,
-                table_schema=table_schema,
-                table_name=table_name,
-                if_exists=if_exists,
-                sep=sep,
-                cols=cols,
-                allow_import=allow_import,
+                file=config.get("file"),
+                table_schema=config.get("table_name"),
+                table_name=config.get("table_name"),
+                if_exists=config.get("if_exists"),
+                sep=config.get("sep", ","),
+                cols=config.get("cols"),
+                allow_import=config.get("allow_import", False),
             )

@@ -1,0 +1,2 @@
+IMPORT = "imports"
+SCRIPTS = "scripts"

@@ -1,64 +1,32 @@
-from typing import Callable, List, Literal, Optional
+from typing import List, Literal
 
 import pandas as pd
 
 from sqlalchemy import Engine
-
-
-from ..constants.dicts import FFEICConfig, ScriptsConfig
 from ..logger import logger
 
 
 class ImportHandler:
-    @staticmethod
-    def create_config(
-        directory: str,
-        configs: List[FFEICConfig | ScriptsConfig],
-        create_file_dict: Callable[[str], dict[str, str]],
-    ) -> List[FFEICConfig | ScriptsConfig]:
+
+    @classmethod
+    def _header_processor(headers: List[str]) -> List[str]:
         """
-        Configures import JSON dynamically with {file: file_path}
-        Immports and scripts are structured differently
+        Normalizes headers read from files to simplify sql statements.
 
         Parameters:
-        - directory: directory path
-        - config: Import JSON
+        - headers: list of column headers
         """
-        file_dict: dict[str, str] = create_file_dict(directory)
+        return [header.replace("#", "").lower().strip() for header in headers]
 
-        def _add_file_path(
-            configs: List[FFEICConfig | ScriptsConfig], file_dict: dict[str, str]
-        ):
-            """Dynamically adds file paths to configs based on key_type and name."""
-
-            for config in configs:
-
-                config["file_path"] = next(
-                    (
-                        value
-                        for key, value in file_dict.items()
-                        if (
-                            "key_type" in config
-                            and config["key_type"] == "prefix"
-                            and config["name"] == key[:4]
-                        )
-                        or (config["name"] == key)
-                    ),
-                    None,
-                )
-            return configs
-
-        return _add_file_path(configs=configs, file_dict=file_dict)
-
-    @staticmethod
-    def import_loader(
+    @classmethod
+    def to_sql_handler(
+        cls,
         engine: Engine,
         file: str,
         table_schema: str,
         table_name: str,
         if_exists: Literal["append", "fail", "replace"],
         sep: Literal[",", "^"],
-        normalize_headers: Callable[[List[str]], List[str]],
         cols: List[str] = None,
         allow_import: bool = False,
     ) -> None:
@@ -86,7 +54,7 @@ class ImportHandler:
                 )
 
                 if cols is None:
-                    df.columns = normalize_headers(headers=df.columns)
+                    df.columns = cls._header_processor(headers=df.columns)
                 else:
                     df = df[cols]
 
@@ -106,24 +74,11 @@ class ImportHandler:
         except Exception as e:
             logger.warning(f"UnhandledError: {e}")
 
-    @staticmethod
+    @classmethod
     def import_handler(
+        cls,
         engine: Engine,
         configs: List[dict],
-        import_loader: Callable[
-            [
-                Engine,
-                str,
-                str,
-                str,
-                Literal["append", "fail", "replace"],
-                Literal[",", "^"],
-                Callable[[List[str]], List[str]],
-                Optional[List[str]],
-                bool,
-            ],
-            None,
-        ],
     ) -> None:
         """
         Facilitates import based on configurations
@@ -142,7 +97,7 @@ class ImportHandler:
             cols = config["cols"]
             allow_import = config["allow_import"]
 
-            import_loader(
+            cls.to_sql_handler(
                 engine=engine,
                 file=file,
                 table_schema=table_schema,

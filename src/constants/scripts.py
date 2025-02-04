@@ -14,7 +14,7 @@ from typing import List
 
 from .dicts import ScriptsConfig
 
-SCRIPTS_PREFLIGHT: List[ScriptsConfig] = [
+PREFLIGHT: List[ScriptsConfig] = [
     {
         "name": "001_preflight",
         "description": "preflight is a fail safe mechanism to ensure there is no chance of duplicate data",
@@ -28,7 +28,8 @@ This json acts as a configuration mechanism for sequential ordering of script ex
 There are better ways to do this but this was intended to be quick lightweight solution.
 If `allow_exe` set to Fale, it will be excluded during execution.
 """
-SCRIPTS_TRANS_LOAD: List[ScriptsConfig] = [
+
+DEPENDENCIES: List[ScriptsConfig] = [
     {
         "name": "002_functions",
         "description": "creates resusable functions that are a dependency",
@@ -44,6 +45,8 @@ SCRIPTS_TRANS_LOAD: List[ScriptsConfig] = [
         "description": "creation of tmp tables for transformation",
         "allow_exe": True,
     },
+]
+ATTRIBUTES: List[ScriptsConfig] = [
     {
         "name": "005_attributes_inst",
         "description": "transformation of csv_attributes",
@@ -75,6 +78,13 @@ SCRIPTS_TRANS_LOAD: List[ScriptsConfig] = [
         "allow_exe": True,
     },
     {
+        "name": "014_inst_addresses_load",
+        "description": "transformation of institution physical addresses and loads to target table",
+        "allow_exe": True,
+    },
+]
+RELATIONSHIPS: List[ScriptsConfig] = [
+    {
         "name": "011_relationships",
         "description": "transformation of csv_relationships",
         "allow_exe": True,
@@ -84,16 +94,15 @@ SCRIPTS_TRANS_LOAD: List[ScriptsConfig] = [
         "description": "loads transformed data into target table",
         "allow_exe": True,
     },
+]
+TRANSFORMATIONS: List[ScriptsConfig] = [
     {
         "name": "013_transformations",
         "description": "transformation of csv_transformations and loading to target table",
         "allow_exe": True,
     },
-    {
-        "name": "014_inst_addresses_load",
-        "description": "transformation of institution physical addresses and loads to target table",
-        "allow_exe": True,
-    },
+]
+GOV_IDENTIFIERS: List[ScriptsConfig] = [
     {
         "name": "015_fips_load",
         "description": "transformation and load of statistical identification codes for county, state, and country",
@@ -104,6 +113,8 @@ SCRIPTS_TRANS_LOAD: List[ScriptsConfig] = [
         "description": "transformation and load of naics codes",
         "allow_exe": True,
     },
+]
+CALL_REPORTS: List[ScriptsConfig] = [
     {
         "name": "017_call_reports",
         "description": "loading of call report data",

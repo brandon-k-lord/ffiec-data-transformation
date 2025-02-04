@@ -10,38 +10,48 @@ logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 
-def script_runner(engine: Engine, script: str):
-    """
-    Parameters:
-    - engine: Connection
-    - script: Executable SQL file
-    """
-    try:
-        with open(script, "r") as file:
-            sql_script = file.read()
+class ScriptHandler:
 
-        with engine.begin() as conn:
-            conn.execute(text(sql_script))
-            conn.commit()
-    except Exception as e:
-        logger.error(f"Failed to execute {script}: {str(e)}")
+    @classmethod
+    def _script_runner(cls, engine: Engine, script: str) -> None:
+        """
+        Executes an SQL script using the provided database engine.
 
+        Args:
+            engine (Engine): SQLAlchemy database engine for executing queries.
+            script (str): Path to the SQL script file to be executed.
 
-def execute_scripts(engine: Engine, configs: List[ScriptsConfig]) -> None:
-    """
-    Facilitates script execution based on configurations
+        Raises:
+            Exception: Logs an error if the script execution fails.
+        """
+        try:
+            with open(script, "r") as file:
+                sql_script = file.read()
 
-    Parameters:
-    - engine: connection
-    - config: Script JSON
-    """
-    for config in configs:
-        script = config["file"]
-        allow_exe = config["allow_exe"]
-        if allow_exe:
-            logger.info(f"service: init_scripts | executing file: {script}")
-            script_runner(engine=engine, script=script)
-        else:
-            logger.info(
-                f"Skipping execution for {script} due to 'allow_exe' being False"
-            )
+            with engine.begin() as conn:
+                conn.execute(text(sql_script))
+                conn.commit()
+        except Exception as e:
+            logger.error(f"Failed to execute {script}: {str(e)}")
+
+    @classmethod
+    def execute_scripts(cls, engine: Engine, configs: List[ScriptsConfig]) -> None:
+        """
+        Executes multiple SQL scripts based on the provided configurations.
+
+        Args:
+            engine (Engine): SQLAlchemy database engine for executing queries.
+            configs (List[ScriptsConfig]): List of script configurations, each containing:
+                - file (str): Path to the SQL script file.
+                - allow_exe (bool): Flag to determine if the script should be executed.
+        """
+        for config in configs:
+            script = config["file"]
+            allow_exe = config["allow_exe"]
+            if allow_exe:
+                logger.info(f"service: init_scripts | executing file: {script}")
+                cls._script_runner(engine=engine, script=script)
+            else:
+                logger.info(
+                    f"Skipping execution for {script} due to 'allow_exe' being False"
+                )

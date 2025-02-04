@@ -1,3 +1,3 @@
-from .file import create_file_dict
 from .importer import ImportHandler
-from .file import FileHandler
+from .config import ConfigHandler
+from .script import ScriptHandler

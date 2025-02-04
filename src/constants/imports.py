@@ -1,5 +1,5 @@
 """ 
-FFIEC_FI_IMPORT
+Imports
 
 JSON acts as configuration mechanism for the loading of csvs in the import folder.
 If `allow_import` set to false, it will be skipped in the load process.
@@ -21,8 +21,25 @@ from typing import List
 
 from .dicts import FFEICConfig
 
+BHCF: List[FFEICConfig] = [
+    {
+        "name": "bhcf",
+        "key_type": "prefix",
+        "table_schema": "transformations",
+        "table_name": "tmp_bhcf",
+        "if_exists": "fail",
+        "sep": "^",
+        "allow_import": True,
+        "cols": [
+            "RSSD9001",  # rssd_id
+            "RSSD9999",  # reporting_date
+            "BHCA2170",  # total assets
+        ],
+    }
+]
 
-FFIEC_FI_IMPORT: List[FFEICConfig] = [
+
+ATTRIBUTES: List[FFEICConfig] = [
     {
         "name": "csv_attributes_active",
         "key_type": "full",
@@ -53,6 +70,35 @@ FFIEC_FI_IMPORT: List[FFEICConfig] = [
         "allow_import": True,
         "cols": [],
     },
+]
+
+RELATIONSHIPS: List[FFEICConfig] = [
+    {
+        "name": "csv_relationships",
+        "key_type": "full",
+        "table_schema": "transformations",
+        "table_name": "tmp_relationships",
+        "if_exists": "replace",
+        "sep": ",",
+        "allow_import": True,
+        "cols": [],
+    },
+]
+
+TRANSFORMATIONS: List[FFEICConfig] = [
+    {
+        "name": "csv_transformations",
+        "key_type": "full",
+        "table_schema": "transformations",
+        "table_name": "tmp_transformations",
+        "if_exists": "replace",
+        "sep": ",",
+        "allow_import": True,
+        "cols": [],
+    },
+]
+
+GOV_IDENTIFIERS: List[FFEICConfig] = [
     {
         "name": "csv_country_codes",
         "key_type": "full",
@@ -84,30 +130,10 @@ FFIEC_FI_IMPORT: List[FFEICConfig] = [
         "cols": [],
     },
     {
-        "name": "csv_relationships",
-        "key_type": "full",
-        "table_schema": "transformations",
-        "table_name": "tmp_relationships",
-        "if_exists": "replace",
-        "sep": ",",
-        "allow_import": True,
-        "cols": [],
-    },
-    {
         "name": "csv_state_codes",
         "key_type": "full",
         "table_schema": "transformations",
         "table_name": "tmp_state_codes",
-        "if_exists": "replace",
-        "sep": ",",
-        "allow_import": True,
-        "cols": [],
-    },
-    {
-        "name": "csv_transformations",
-        "key_type": "full",
-        "table_schema": "transformations",
-        "table_name": "tmp_transformations",
         "if_exists": "replace",
         "sep": ",",
         "allow_import": True,

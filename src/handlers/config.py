@@ -9,7 +9,7 @@ from ..logger import logger
 
 class ConfigHandler:
     @classmethod
-    def _create_file_dict(cls, directory: str) -> dict[str, str]:
+    def create_file_dict(cls, directory: str) -> dict[str, str]:
         """
         Creates iterable dict of file paths.
 
@@ -58,8 +58,8 @@ class ConfigHandler:
     @classmethod
     def create_config(
         cls,
-        directory: str,
         configs: List[FFEICConfig | ScriptsConfig],
+        file_dict: dict[str, str],
     ) -> List[FFEICConfig | ScriptsConfig]:
         """
         Configures import JSON dynamically with {file: file_path}
@@ -69,5 +69,4 @@ class ConfigHandler:
         - directory: directory path
         - config: Import JSON
         """
-        file_dict: dict[str, str] = cls._create_file_dict(directory)
         return cls._add_file_path(configs=configs, file_dict=file_dict)

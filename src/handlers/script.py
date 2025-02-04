@@ -1,7 +1,8 @@
 import logging
 
 from typing import List
-from sqlalchemy import Engine, text
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..constants.dicts import ScriptsConfig
 from ..logger import logger
@@ -13,7 +14,7 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 class ScriptHandler:
 
     @classmethod
-    def _script_runner(cls, engine: Engine, script: str) -> None:
+    async def _script_runner(cls, db: AsyncSession, script: str) -> None:
         """
         Executes an SQL script using the provided database engine.
 
@@ -28,14 +29,16 @@ class ScriptHandler:
             with open(script, "r") as file:
                 sql_script = file.read()
 
-            with engine.begin() as conn:
-                conn.execute(text(sql_script))
-                conn.commit()
+            async with db.begin():
+                await db.execute(text(sql_script))
+                await db.commit()
         except Exception as e:
             logger.error(f"Failed to execute {script}: {str(e)}")
 
     @classmethod
-    def execute_scripts(cls, engine: Engine, configs: List[ScriptsConfig]) -> None:
+    async def execute_scripts(
+        cls, db: AsyncSession, configs: List[ScriptsConfig]
+    ) -> None:
         """
         Executes multiple SQL scripts based on the provided configurations.
 
@@ -50,7 +53,7 @@ class ScriptHandler:
             allow_exe = config.get("allow_exe", False)
             if allow_exe:
                 logger.info(f"service: init_scripts | executing file: {script}")
-                cls._script_runner(engine=engine, script=script)
+                await cls._script_runner(db=db, script=script)
             else:
                 logger.info(
                     f"Skipping execution for {script} due to 'allow_exe' being False"

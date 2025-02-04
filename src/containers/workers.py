@@ -1,4 +1,8 @@
+import asyncio
 from concurrent.futures import ProcessPoolExecutor
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import Engine
 
 from .imports import ImportContainer
 from .scripts import ScriptContainer
@@ -27,17 +31,21 @@ class WorkersContainer:
         self._imports: ImportContainer = imports
         self._scripts: ScriptContainer = scripts
 
-    def dependency(self):
+    def _run_async_func(self, func, db):
+
+        return asyncio.run(func(db))
+
+    async def dependency(self, db: AsyncSession):
         """
         Executes preflight and dependency scripts sequentially.
 
         This method ensures that necessary scripts required for imports or other operations
         are executed before running workers.
         """
-        self._scripts.preflight_scripts()
-        self._scripts.dependency_scripts()
+        await self._scripts.preflight_scripts(db=db)
+        await self._scripts.dependency_scripts(db=db)
 
-    def import_workers(self):
+    def import_workers(self, engine: Engine):
         """
         Executes import-related tasks concurrently.
 
@@ -53,7 +61,7 @@ class WorkersContainer:
         """
         with ProcessPoolExecutor() as executor:
             executor.map(
-                lambda func: func(),
+                lambda func, engine=engine: func(engine),
                 [
                     self._imports.attribute_import,
                     self._imports.relationship_import,
@@ -63,7 +71,7 @@ class WorkersContainer:
                 ],
             )
 
-    def script_workers(self):
+    def script_workers(self, db: AsyncSession):
         """
         Executes script-related tasks concurrently.
 
@@ -77,9 +85,10 @@ class WorkersContainer:
             - gov_identifier_scripts
             - call_report_scripts
         """
+
         with ProcessPoolExecutor() as executor:
             executor.map(
-                lambda func: func(),
+                lambda func, db=db: self._run_async_func(func=func, db=db),
                 [
                     self._scripts.attribute_scripts,
                     self._scripts.relationship_scripts,

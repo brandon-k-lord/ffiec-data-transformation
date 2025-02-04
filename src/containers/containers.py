@@ -1,16 +1,13 @@
-from sqlalchemy import Engine
-
-from bk_workspace.py_services.loan_app.backend.src.database import db
-
 from .configs import ConfigContainer
-from .database import DatabaseContainer
 from .imports import ImportContainer
 from .scripts import ScriptContainer
 from .workers import WorkersContainer
+from .schema import SchemaContainer
+from ..handlers.schema import SchemaHandler
 from ..registry.process import ProcessRegistry
 from ..handlers import ConfigHandler, ImportHandler, ScriptHandler
-from ..database.db import DBInitializer, get_engine
-from ..constants.database import CONNECTION_STRING
+
+# TODO: Update this documentation
 
 
 class DependencyContainer:
@@ -31,8 +28,8 @@ class DependencyContainer:
     def __init__(
         self,
         config_handler: ConfigHandler,
-        db_initializer: DBInitializer,
         import_handler: ImportHandler,
+        schema_handler: SchemaHandler,
         script_handler: ScriptHandler,
     ):
         """
@@ -44,8 +41,8 @@ class DependencyContainer:
             script_handler (ScriptHandler): Manages script execution.
         """
         self._config_handler: ConfigHandler = config_handler
-        self._db_initializer: DBInitializer = db_initializer
         self._import_handler: ImportHandler = import_handler
+        self._script_handler: SchemaHandler = schema_handler
         self._script_handler: ScriptHandler = script_handler
 
     def configs(self) -> ConfigContainer:
@@ -67,9 +64,11 @@ class DependencyContainer:
         """
         return ImportContainer(
             config=self.configs(),
-            engine=None,  # TODO: update this
             import_handler=self._import_handler,
         )
+
+    def schemas(self) -> SchemaContainer:
+        return SchemaContainer(schema_handler=self._script_handler)
 
     def scripts(self) -> ScriptContainer:
         """
@@ -81,7 +80,6 @@ class DependencyContainer:
         """
         return ScriptContainer(
             config=self.configs(),
-            engine=self._engine,
             script_handler=self._script_handler,
         )
 
@@ -105,16 +103,6 @@ class DependencyContainer:
         """
         return ProcessRegistry(workers=self.workers())
 
-    def database(self) -> DatabaseContainer:
-
-        return DatabaseContainer(
-            engine=self._engine, db_initializer=self._db_initializer
-        )
-
-
-# Initialize database engine
-engine = get_engine(connection_string=CONNECTION_STRING, echo=False)
-
 
 def get_dependency_container() -> DependencyContainer:
     """
@@ -125,9 +113,8 @@ def get_dependency_container() -> DependencyContainer:
                              `ScriptHandler`, and the database engine.
     """
     return DependencyContainer(
-        engine=engine,
         config_handler=ConfigHandler,
-        db_initializer=DBInitializer,
         import_handler=ImportHandler,
+        schema_handler=SchemaHandler,
         script_handler=ScriptHandler,
     )

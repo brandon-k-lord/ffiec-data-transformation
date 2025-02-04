@@ -1,4 +1,6 @@
 from ..containers.workers import WorkersContainer
+from ..handlers.session import SessionHandler
+from ..database.generators import get_postgres_async_db, get_postgres_async_shared_db
 
 
 class ProcessRegistry:
@@ -23,11 +25,11 @@ class ProcessRegistry:
         """
         self._workers: WorkersContainer = workers
 
-    def process(self) -> None:
+    async def process(self) -> None:
         """
         Executes the full process pipeline by triggering dependency setup, import tasks,
         and script execution in the correct order.
         """
-        self._workers.dependency()
-        self._workers.import_workers()
-        self._workers.script_workers()
+        await self._workers.dependency(db=get_postgres_async_shared_db())
+        self._workers.import_workers(engine=SessionHandler.create_postgres_engine())
+        self._workers.script_workers(db=get_postgres_async_db())

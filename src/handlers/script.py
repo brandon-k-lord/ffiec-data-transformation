@@ -42,11 +42,11 @@ class ScriptHandler:
         Args:
             engine (Engine): SQLAlchemy database engine for executing queries.
             configs (List[ScriptsConfig]): List of script configurations, each containing:
-                - file (str): Path to the SQL script file.
+                - file_path (str): Path to the SQL script file.
                 - allow_exe (bool): Flag to determine if the script should be executed.
         """
         for config in configs:
-            script = config.get("file")
+            script = config.get("file_path")
             allow_exe = config.get("allow_exe", False)
             if allow_exe:
                 logger.info(f"service: init_scripts | executing file: {script}")

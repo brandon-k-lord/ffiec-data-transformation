@@ -1,12 +1,15 @@
 from sqlalchemy import Engine
 
+from bk_workspace.py_services.loan_app.backend.src.database import db
+
 from .configs import ConfigContainer
+from .database import DatabaseContainer
 from .imports import ImportContainer
 from .scripts import ScriptContainer
 from .workers import WorkersContainer
 from ..registry.process import ProcessRegistry
 from ..handlers import ConfigHandler, ImportHandler, ScriptHandler
-from ..database.connection import init_engine
+from ..database.db import DBInitializer, get_engine
 from ..constants.database import CONNECTION_STRING
 
 
@@ -27,8 +30,8 @@ class DependencyContainer:
 
     def __init__(
         self,
-        engine: Engine,
         config_handler: ConfigHandler,
+        db_initializer: DBInitializer,
         import_handler: ImportHandler,
         script_handler: ScriptHandler,
     ):
@@ -36,13 +39,12 @@ class DependencyContainer:
         Initializes the DependencyContainer with required service handlers and the database engine.
 
         Parameters:
-            engine (Engine): SQLAlchemy engine used for database interactions.
             config_handler (ConfigHandler): Handles application configurations.
             import_handler (ImportHandler): Manages data import operations.
             script_handler (ScriptHandler): Manages script execution.
         """
-        self._engine: Engine = engine
         self._config_handler: ConfigHandler = config_handler
+        self._db_initializer: DBInitializer = db_initializer
         self._import_handler: ImportHandler = import_handler
         self._script_handler: ScriptHandler = script_handler
 
@@ -65,7 +67,7 @@ class DependencyContainer:
         """
         return ImportContainer(
             config=self.configs(),
-            engine=self._engine,
+            engine=None,  # TODO: update this
             import_handler=self._import_handler,
         )
 
@@ -103,9 +105,15 @@ class DependencyContainer:
         """
         return ProcessRegistry(workers=self.workers())
 
+    def database(self) -> DatabaseContainer:
+
+        return DatabaseContainer(
+            engine=self._engine, db_initializer=self._db_initializer
+        )
+
 
 # Initialize database engine
-engine = init_engine(connection_string=CONNECTION_STRING, echo=False)
+engine = get_engine(connection_string=CONNECTION_STRING, echo=False)
 
 
 def get_dependency_container() -> DependencyContainer:
@@ -119,6 +127,7 @@ def get_dependency_container() -> DependencyContainer:
     return DependencyContainer(
         engine=engine,
         config_handler=ConfigHandler,
+        db_initializer=DBInitializer,
         import_handler=ImportHandler,
         script_handler=ScriptHandler,
     )

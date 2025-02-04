@@ -1,6 +1,7 @@
 from sqlalchemy import Engine
 from .configs import ConfigContainer
 from ..handlers import ImportHandler
+from ..database.connections import postgres_engine
 
 
 class ImportContainer:
@@ -13,9 +14,7 @@ class ImportContainer:
         _engine (Engine): Database or processing engine used for executing imports.
     """
 
-    def __init__(
-        self, config: ConfigContainer, import_handler: ImportHandler, engine: Engine
-    ):
+    def __init__(self, config: ConfigContainer, import_handler: ImportHandler):
         """
         Initializes the ImportContainer with configuration, import handler, and processing engine.
 
@@ -26,7 +25,6 @@ class ImportContainer:
         """
         self._config: ConfigContainer = config
         self._import_handler: ImportHandler = import_handler
-        self._engine: Engine = engine
 
     def bhcf_import(self) -> None:
         """
@@ -35,7 +33,7 @@ class ImportContainer:
         """
         return self._import_handler.import_handler(
             configs=self._config.bhcf_imports(),
-            engine=self._engine,
+            engine=postgres_engine,
         )
 
     def attribute_import(self) -> None:
@@ -45,7 +43,7 @@ class ImportContainer:
         """
         return self._import_handler.import_handler(
             configs=self._config.attribute_imports(),
-            engine=self._engine,
+            engine=postgres_engine,
         )
 
     def relationship_import(self) -> None:
@@ -55,7 +53,7 @@ class ImportContainer:
         """
         return self._import_handler.import_handler(
             configs=self._config.relationship_imports(),
-            engine=self._engine,
+            engine=postgres_engine,
         )
 
     def transformation_import(self) -> None:
@@ -65,7 +63,7 @@ class ImportContainer:
         """
         return self._import_handler.import_handler(
             configs=self._config.transformation_imports(),
-            engine=self._engine,
+            engine=postgres_engine,
         )
 
     def gov_identifier_import(self) -> None:
@@ -75,5 +73,5 @@ class ImportContainer:
         """
         return self._import_handler.import_handler(
             configs=self._config.gov_identifier_imports(),
-            engine=self._engine,
+            engine=postgres_engine,
         )

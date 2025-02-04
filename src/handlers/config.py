@@ -1,13 +1,15 @@
 import os
 
+import pprint
 from typing import List
 
 from ..constants.dicts import FFEICConfig, ScriptsConfig
+from ..logger import logger
 
 
 class ConfigHandler:
     @classmethod
-    def _create_file_dict(directory: str) -> dict[str, str]:
+    def _create_file_dict(cls, directory: str) -> dict[str, str]:
         """
         Creates iterable dict of file paths.
 
@@ -18,6 +20,9 @@ class ConfigHandler:
         - directory: directory name
         """
         wk_dir = os.path.join(os.getcwd(), directory)
+
+        # TODO: We can do this jsut once instead of each time.
+
         return {
             file.lower().split(".")[0]: os.path.join(wk_dir, file)
             for file in os.listdir(path=wk_dir)
@@ -25,10 +30,11 @@ class ConfigHandler:
 
     @classmethod
     def _add_file_path(
-        configs: List[FFEICConfig | ScriptsConfig], file_dict: dict[str, str]
+        cls, configs: List[FFEICConfig | ScriptsConfig], file_dict: dict[str, str]
     ):
         """Dynamically adds file paths to configs based on key_type and name."""
-
+        # TODO: Remove logger
+        logger.info("File Dictionary: %s", pprint.pformat(file_dict, indent=2))
         for config in configs:
 
             config["file_path"] = next(
@@ -44,6 +50,9 @@ class ConfigHandler:
                 ),
                 None,
             )
+
+        # TODO: Remove logger
+        logger.info("Configs: %s", pprint.pformat(configs, indent=2))
         return configs
 
     @classmethod

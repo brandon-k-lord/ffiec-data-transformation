@@ -9,7 +9,7 @@ from ..logger import logger
 class ImportHandler:
 
     @classmethod
-    def _header_processor(headers: List[str]) -> List[str]:
+    def _header_processor(cls, headers: List[str]) -> List[str]:
         """
         Normalizes headers read from files to simplify sql statements.
 

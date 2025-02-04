@@ -1,10 +1,11 @@
 from sqlalchemy import Engine, create_engine, text
 
-def intit_engine(connection_string:str, echo:bool)->Engine:
+
+def init_engine(connection_string: str, echo: bool) -> Engine:
     return create_engine(url=connection_string, echo=False)
 
 
-def init_table_schema(schema: str, engine: Engine)->None:
+def init_table_schema(schema: str, engine: Engine) -> None:
     """
     Ensures table schema exists
 

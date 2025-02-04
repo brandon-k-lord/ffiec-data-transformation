@@ -4,23 +4,25 @@ from .configs import ConfigContainer
 from .imports import ImportContainer
 from .scripts import ScriptContainer
 from .workers import WorkersContainer
-from ..registery.process import ProcessRegistery
+from ..registry.process import ProcessRegistry
 from ..handlers import ConfigHandler, ImportHandler, ScriptHandler
-from ..database.connection import intit_engine
+from ..database.connection import init_engine
 from ..constants.database import CONNECTION_STRING
 
 
 class DependencyContainer:
     """
-    A container class that provides access to configuration and import handling.
+    A container class that manages and provides access to application dependencies.
 
-    This class initializes and manages dependencies for `ConfigContainer` and `ImportContainer`,
-    ensuring that configuration settings and import operations are easily accessible.
+    This class centralizes and initializes dependencies required for configuration handling,
+    data imports, script execution, and worker management. It ensures that different components
+    can interact seamlessly by maintaining shared instances.
 
     Attributes:
-        _config_handler (ConfigHandler): An instance of ConfigHandler for managing configurations.
-        _import_handler (ImportHandler): An instance of ImportHandler for handling data imports.
-        _engine (Engine): A SQLAlchemy database engine used for database interactions.
+        _engine (Engine): A SQLAlchemy database engine for database interactions.
+        _config_handler (ConfigHandler): Handles configuration settings.
+        _import_handler (ImportHandler): Manages data import operations.
+        _script_handler (ScriptHandler): Manages script execution.
     """
 
     def __init__(
@@ -31,13 +33,13 @@ class DependencyContainer:
         script_handler: ScriptHandler,
     ):
         """
-        Initializes the MasterContainer with necessary dependencies.
+        Initializes the DependencyContainer with required service handlers and the database engine.
 
         Parameters:
-            engine (Engine): The SQLAlchemy engine is used for database interactions.
-            config_handler (ConfigHandler): The configuration handler is responsible for managing configurations.
-            import_handler (ImportHandler): The import handler is responsible for managing data imports.
-            script_handler (ScriptHandler): The script handler is responsible for managing configurations.
+            engine (Engine): SQLAlchemy engine used for database interactions.
+            config_handler (ConfigHandler): Handles application configurations.
+            import_handler (ImportHandler): Manages data import operations.
+            script_handler (ScriptHandler): Manages script execution.
         """
         self._engine: Engine = engine
         self._config_handler: ConfigHandler = config_handler
@@ -46,20 +48,20 @@ class DependencyContainer:
 
     def configs(self) -> ConfigContainer:
         """
-        Creates and returns a ConfigContainer instance.
+        Creates and returns a ConfigContainer instance for managing application configurations.
 
         Returns:
-            ConfigContainer: An instance of ConfigContainer initialized with `_config_handler`.
+            ConfigContainer: An instance initialized with `_config_handler`.
         """
         return ConfigContainer(config_handler=self._config_handler)
 
     def imports(self) -> ImportContainer:
         """
-        Creates and returns an ImportContainer instance.
+        Creates and returns an ImportContainer instance for managing data imports.
 
         Returns:
-            ImportContainer: An instance of ImportContainer initialized with a `ConfigContainer`,
-                             `_engine`, and `_import_handler`.
+            ImportContainer: An instance initialized with `ConfigContainer`, `_engine`,
+                             and `_import_handler` to facilitate data import processes.
         """
         return ImportContainer(
             config=self.configs(),
@@ -69,11 +71,11 @@ class DependencyContainer:
 
     def scripts(self) -> ScriptContainer:
         """
-        Creates and returns an ScriptContainer instance.
+        Creates and returns a ScriptContainer instance for executing scripts.
 
         Returns:
-            ScriptContainer: An instance of ScriptContainer initialized with a `ConfigContainer`,
-                             `_engine`, and `_script_handler`.
+            ScriptContainer: An instance initialized with `ConfigContainer`, `_engine`,
+                             and `_script_handler` to facilitate script execution.
         """
         return ScriptContainer(
             config=self.configs(),
@@ -82,23 +84,37 @@ class DependencyContainer:
         )
 
     def workers(self) -> WorkersContainer:
+        """
+        Creates and returns a WorkersContainer instance for handling parallel execution of imports and scripts.
+
+        Returns:
+            WorkersContainer: An instance initialized with `ImportContainer` and `ScriptContainer`,
+                              allowing concurrent execution of import and script tasks.
+        """
         return WorkersContainer(imports=self.imports(), scripts=self.scripts())
 
-    def registery(self) -> ProcessRegistery:
-        return ProcessRegistery(workers=self.workers())
+    def registry(self) -> ProcessRegistry:
+        """
+        Creates and returns a ProcessRegistry instance to manage process execution.
+
+        Returns:
+            ProcessRegistry: An instance initialized with `WorkersContainer`,
+                              providing centralized process management.
+        """
+        return ProcessRegistry(workers=self.workers())
 
 
 # Initialize database engine
-engine = intit_engine(connection_string=CONNECTION_STRING, echo=False)
+engine = init_engine(connection_string=CONNECTION_STRING, echo=False)
 
 
-def dependency_container() -> DependencyContainer:
+def get_dependency_container() -> DependencyContainer:
     """
     Creates and returns an instance of `DependencyContainer` with initialized dependencies.
 
     Returns:
-        DepenencyContainer: An instance of DepenencyContainer initialized with `ConfigHandler`,
-                         `ImportHandler`, and the database engine.
+        DependencyContainer: An instance initialized with `ConfigHandler`, `ImportHandler`,
+                             `ScriptHandler`, and the database engine.
     """
     return DependencyContainer(
         engine=engine,

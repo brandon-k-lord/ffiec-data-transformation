@@ -1,9 +1,9 @@
 import src.constants as cnst
-from src.database import intit_engine, init_table_schema
+from src.database import init_engine, init_table_schema
 from src.import_config import ImportConfig
 
 
-engine = intit_engine()
+engine = init_engine()
 import_config = ImportConfig()
 
 

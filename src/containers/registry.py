@@ -63,16 +63,17 @@ class RegistryContainer:
         The workflow ensures that all required dependencies are initialized before
         executing imports and scripts.
         """
-        async with self._session.get_postgres_async_shared_db() as shared_async_db:
-            await self._worker.dependency(db=shared_async_db)
+        with self._session.get_postgres_async_shared_db() as shared_async_db:
+            self._worker.dependency(db=shared_async_db)
+
         self._worker.import_workers(engine=self._session.create_postgres_engine())
 
-        async with self._session.get_postgres_async_db() as async_db:
+        with self._session.get_postgres_async_db() as async_db:
             self._worker.script_workers(db=async_db)
 
     async def create_schema(self) -> None:
         """
         Initiates schema creation.
         """
-        async with self._session.get_postgres_async_shared_db() as db:
-            await self._schema.create_transformation_schema(db=db)
+        with self._session.get_postgres_async_shared_db() as db:
+            self._schema.create_transformation_schema(db=db)

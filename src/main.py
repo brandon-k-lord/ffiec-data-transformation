@@ -1,13 +1,11 @@
-import asyncio
-
 from .containers import DependencyManager
 
 
-async def main():
+def main():
     registry = DependencyManager.registry()
-    await registry.create_schema()
-    await registry.process()
+    registry.create_schema()
+    registry.process()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

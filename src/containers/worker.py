@@ -9,7 +9,7 @@ import asyncio
 from concurrent.futures import ProcessPoolExecutor
 
 from sqlalchemy import Engine
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import Session
 
 from .imports import ImportContainer
 from .script import ScriptContainer
@@ -38,11 +38,7 @@ class WorkerContainer:
         self._import: ImportContainer = import_
         self._script: ScriptContainer = script
 
-    def _run_async_func(self, func, db: AsyncSession):
-        """Runs an asynchronous function in a synchronous context."""
-        return asyncio.run(func(db))
-
-    async def dependency(self, db: AsyncSession):
+    def dependency(self, db: Session):
         """
         Executes preflight and dependency scripts sequentially.
 
@@ -50,10 +46,10 @@ class WorkerContainer:
         are executed before running workers.
 
         Parameters:
-            db (AsyncSession): The database session used for script execution.
+            db (Session): The database session used for script execution.
         """
-        await self._script.preflight_scripts(db=db)
-        await self._script.dependency_scripts(db=db)
+        self._script.preflight_scripts(db=db)
+        self._script.dependency_scripts(db=db)
 
     def import_workers(self, engine: Engine):
         """
@@ -81,7 +77,7 @@ class WorkerContainer:
                 ],
             )
 
-    def script_workers(self, db: AsyncSession):
+    def script_workers(self, db: Session):
         """
         Executes script-related tasks concurrently using process-based concurrency.
 
@@ -93,11 +89,11 @@ class WorkerContainer:
             - call_report_scripts
 
         Parameters:
-            db (AsyncSession): The asynchronous database session used for script execution.
+            db (Session): The asynchronous database session used for script execution.
         """
         with ProcessPoolExecutor() as executor:
             executor.map(
-                lambda func, db=db: self._run_async_func(func=func, db=db),
+                lambda func, db=db: func(db),
                 [
                     self._script.attribute_scripts,
                     self._script.relationship_scripts,

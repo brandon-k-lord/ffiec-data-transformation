@@ -56,12 +56,12 @@ class ConfigContainer:
     def get_script_file_dict(
         self, directory: str = directory.SCRIPTS
     ) -> dict[str, str]:
-        if self._import_script_dict is None:
-            self._import_script_dict = self._config_handler.create_file_dict(
+        if self._script_file_dict is None:
+            self._script_file_dict = self._config_handler.create_file_dict(
                 directory=directory
             )
 
-        return self._import_script_dict
+        return self._script_file_dict
 
     def bhcf_imports(self) -> List[FFEICConfig | ScriptsConfig]:
         """

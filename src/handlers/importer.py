@@ -53,6 +53,8 @@ class ImportHandler:
                     filepath_or_buffer=file, engine="python", sep=sep, encoding="utf-8"
                 )
 
+                print(df)
+
                 if cols is None:
                     df.columns = cls._header_processor(headers=df.columns)
                 else:
@@ -90,8 +92,8 @@ class ImportHandler:
         for config in configs:
             cls.to_sql_handler(
                 engine=engine,
-                file=config.get("file"),
-                table_schema=config.get("table_name"),
+                file=config.get("file_path"),
+                table_schema=config.get("table_schema"),
                 table_name=config.get("table_name"),
                 if_exists=config.get("if_exists"),
                 sep=config.get("sep", ","),

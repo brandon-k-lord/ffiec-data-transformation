@@ -5,11 +5,11 @@ This module defines the `WorkerContainer` class, which centralizes the execution
 in separate processes using process-based concurrency.
 """
 
-import asyncio
 from concurrent.futures import ProcessPoolExecutor
 
 from sqlalchemy import Engine
-from sqlalchemy.ext.asyncio import Session
+from sqlalchemy.orm import Session
+
 
 from .imports import ImportContainer
 from .script import ScriptContainer
@@ -65,17 +65,23 @@ class WorkerContainer:
         Parameters:
             engine (Engine): The SQLAlchemy engine used for database interactions.
         """
-        with ProcessPoolExecutor() as executor:
-            executor.map(
-                lambda func, engine=engine: func(engine),
-                [
-                    self._import.attribute_import,
-                    self._import.relationship_import,
-                    self._import.transformation_import,
-                    self._import.gov_identifier_import,
-                    self._import.bhcf_import,
-                ],
-            )
+        # with ProcessPoolExecutor() as executor:
+        #     executor.map(
+        #         lambda func, engine=engine: func(engine),
+        #         [
+        #             self._import.attribute_import,
+        #             self._import.relationship_import,
+        #             self._import.transformation_import,
+        #             self._import.gov_identifier_import,
+        #             self._import.bhcf_import,
+        #         ],
+        #     )
+
+        self._import.attribute_import(engine=engine),
+        self._import.relationship_import(engine=engine),
+        self._import.transformation_import(engine=engine),
+        self._import.gov_identifier_import(engine=engine),
+        self._import.bhcf_import(engine=engine),
 
     def script_workers(self, db: Session):
         """
@@ -91,14 +97,20 @@ class WorkerContainer:
         Parameters:
             db (Session): The asynchronous database session used for script execution.
         """
-        with ProcessPoolExecutor() as executor:
-            executor.map(
-                lambda func, db=db: func(db),
-                [
-                    self._script.attribute_scripts,
-                    self._script.relationship_scripts,
-                    self._script.transformation_scripts,
-                    self._script.gov_identifier_scripts,
-                    self._script.call_report_scripts,
-                ],
-            )
+        # with ProcessPoolExecutor() as executor:
+        #     executor.map(
+        #         lambda func, db=db: func(db),
+        #         [
+        #             self._script.attribute_scripts,
+        #             self._script.relationship_scripts,
+        #             self._script.transformation_scripts,
+        #             self._script.gov_identifier_scripts,
+        #             self._script.call_report_scripts,
+        #         ],
+        #     )
+
+        self._script.attribute_scripts(db=db),
+        self._script.relationship_scripts(db=db),
+        self._script.transformation_scripts(db=db),
+        self._script.gov_identifier_scripts(db=db),
+        self._script.call_report_scripts(db=db),

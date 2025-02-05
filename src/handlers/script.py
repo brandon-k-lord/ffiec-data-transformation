@@ -64,12 +64,12 @@ class ScriptHandler:
             - Error logs if script execution fails.
         """
         for config in configs:
-            if config.allow_exe:
+            if config.get("allow_exe"):
                 logger.info(
-                    f"service: init_scripts | executing file: {config.file_path}"
+                    f"service: init_scripts | executing file: {config.get('file_path')}"
                 )
-                cls._script_runner(db=db, script=config.file_path)
+                cls._script_runner(db=db, script=config.get("file_path"))
             else:
                 logger.info(
-                    f"Skipping execution for {config.file_path} due to 'allow_exe' being False"
+                    f"Skipping execution for {config.get('file_path')} due to 'allow_exe' being False"
                 )

@@ -7,9 +7,16 @@ services:
       POSTGRES_USER: ${DB_USRNM}
       POSTGRES_PASSWORD: ${DB_PWD}
       POSTGRES_DB: ${DB_NAME}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USRNM}"]
+      interval: 5s
+      retries: 5
+      timeout: 5s
+
   ffiec-institutions:
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy

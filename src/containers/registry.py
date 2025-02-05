@@ -51,7 +51,7 @@ class RegistryContainer:
         self._session: SessionContainer = session
         self._schema: SchemaContainer = schema
 
-    async def process(self) -> None:
+    def process(self) -> None:
         """
         Executes the complete process pipeline.
 
@@ -63,17 +63,17 @@ class RegistryContainer:
         The workflow ensures that all required dependencies are initialized before
         executing imports and scripts.
         """
-        with self._session.get_postgres_async_shared_db() as shared_async_db:
+        with self._session.get_postgres_shared_db() as shared_async_db:
             self._worker.dependency(db=shared_async_db)
 
         self._worker.import_workers(engine=self._session.create_postgres_engine())
 
-        with self._session.get_postgres_async_db() as async_db:
+        with self._session.get_postgres_db() as async_db:
             self._worker.script_workers(db=async_db)
 
-    async def create_schema(self) -> None:
+    def create_schema(self) -> None:
         """
         Initiates schema creation.
         """
-        with self._session.get_postgres_async_shared_db() as db:
+        with self._session.get_postgres_shared_db() as db:
             self._schema.create_transformation_schema(db=db)

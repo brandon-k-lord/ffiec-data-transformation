@@ -1,6 +1,5 @@
 import asyncio
 from .containers import DependencyManager
-from .database import get_postgres_async_shared_db
 
 
 async def main():

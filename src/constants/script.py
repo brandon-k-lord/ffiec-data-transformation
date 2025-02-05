@@ -129,6 +129,6 @@ CALL_REPORTS: List[ScriptsConfig] = [
     {
         "name": "099_cleanup",
         "description": "post script for dropping tmp tables and functions",
-        "allow_exe": False,
+        "allow_exe": True,
     },
 ]

@@ -1,3 +1,4 @@
+import pprint
 from typing import List, Literal
 
 import pandas as pd
@@ -27,7 +28,7 @@ class ImportHandler:
         table_name: str,
         if_exists: Literal["append", "fail", "replace"],
         sep: Literal[",", "^"],
-        cols: List[str] = None,
+        cols: List[str],
         allow_import: bool = False,
     ) -> None:
         """
@@ -53,16 +54,12 @@ class ImportHandler:
                     filepath_or_buffer=file, engine="python", sep=sep, encoding="utf-8"
                 )
 
+                df.columns = cls._header_processor(headers=df.columns)
+
+                df = df[cols] if cols else df
+
                 print(df)
 
-                if cols is None:
-                    df.columns = cls._header_processor(headers=df.columns)
-                else:
-                    df = df[cols]
-
-                logger.info(
-                    f"service: load_import  |  allow_import:  {allow_import}  |  Loading: file: {file}  |  table_schema:  {table_schema} | table_name:  {table_name}"
-                )
                 logger.info(
                     f"service: load_import  |  message: Loading dataframe to the database, this may take serveral seconds for larger files..."
                 )
@@ -100,3 +97,4 @@ class ImportHandler:
                 cols=config.get("cols"),
                 allow_import=config.get("allow_import", False),
             )
+        logger.info("Configs: %s", pprint.pformat(configs, indent=2))

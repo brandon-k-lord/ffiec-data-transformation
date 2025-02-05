@@ -68,8 +68,8 @@ class RegistryContainer:
 
         self._worker.import_workers(engine=self._session.create_postgres_engine())
 
-        # with self._session.get_postgres_db() as async_db:
-        #     self._worker.script_workers(db=async_db)
+        with self._session.get_postgres_db() as db:
+            self._worker.script_workers(db=db)
 
     def create_schema(self) -> None:
         """

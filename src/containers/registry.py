@@ -63,8 +63,8 @@ class RegistryContainer:
         The workflow ensures that all required dependencies are initialized before
         executing imports and scripts.
         """
-        with self._session.get_postgres_shared_db() as shared_async_db:
-            self._worker.dependency(db=shared_async_db)
+        with self._session.get_postgres_shared_db() as shared_db:
+            self._worker.dependency(db=shared_db)
 
         self._worker.import_workers(engine=self._session.create_postgres_engine())
 

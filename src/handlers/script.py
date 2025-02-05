@@ -4,7 +4,7 @@ from typing import List
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..constants.dicts import ScriptsConfig
+from ..constants.objects import ScriptsConfig
 from ..logger import logger
 
 logging.basicConfig()

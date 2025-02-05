@@ -1,8 +1,23 @@
+"""
+config
+
+This module provides the `ConfigContainer` class, which is responsible for managing
+configuration data related to various FFIEC imports and script executions. It serves
+as a wrapper for the `ConfigHandler` to allow access to configuration settings for
+datasets and scripts related to financial data processing.
+
+The module is designed to streamline the management of configuration values for imports
+and scripts, providing methods to retrieve specific configurations based on category.
+
+Classes:
+    - ConfigContainer: A container that provides access to configuration data for imports and scripts.
+"""
+
 from typing import List
-from ..constants import scripts
+from ..constants import script
 from ..constants import imports
-from ..constants import directories
-from ..constants.dicts import FFEICConfig, ScriptsConfig
+from ..constants import directory
+from ..constants.objects import FFEICConfig, ScriptsConfig
 
 from ..handlers import ConfigHandler
 
@@ -34,9 +49,7 @@ class ConfigContainer:
         """
         self._config_handler: ConfigHandler = config_handler
 
-    def get_import_file_dict(
-        self, directory: str = directories.IMPORT
-    ) -> dict[str, str]:
+    def get_import_file_dict(self, directory: str = directory.IMPORT) -> dict[str, str]:
         if self._import_file_dict is None:
             self._import_file_dict = self._config_handler.create_file_dict(
                 directory=directory
@@ -45,7 +58,7 @@ class ConfigContainer:
         return self._import_file_dict
 
     def get_script_file_dict(
-        self, directory: str = directories.SCRIPTS
+        self, directory: str = directory.SCRIPTS
     ) -> dict[str, str]:
         if self._import_script_dict is None:
             self._import_script_dict = self._config_handler.create_file_dict(
@@ -117,7 +130,7 @@ class ConfigContainer:
             List[FFEICConfig | ScriptsConfig]: A list of configurations specific to preflight scripts.
         """
         return self._config_handler.create_config(
-            configs=scripts.PREFLIGHT,
+            configs=script.PREFLIGHT,
             file_dict=self.get_script_file_dict(),
         )
 
@@ -129,7 +142,7 @@ class ConfigContainer:
             List[FFEICConfig | ScriptsConfig]: A list of configurations specific to preflight scripts.
         """
         return self._config_handler.create_config(
-            configs=scripts.DEPENDENCIES,
+            configs=script.DEPENDENCIES,
             file_dict=self.get_script_file_dict(),
         )
 
@@ -141,7 +154,7 @@ class ConfigContainer:
             List[FFEICConfig | ScriptsConfig]: A list of configurations specific to preflight scripts.
         """
         return self._config_handler.create_config(
-            configs=scripts.ATTRIBUTES,
+            configs=script.ATTRIBUTES,
             file_dict=self.get_script_file_dict(),
         )
 
@@ -153,7 +166,7 @@ class ConfigContainer:
             List[FFEICConfig | ScriptsConfig]: A list of configurations specific to preflight scripts.
         """
         return self._config_handler.create_config(
-            configs=scripts.RELATIONSHIPS,
+            configs=script.RELATIONSHIPS,
             file_dict=self.get_script_file_dict(),
         )
 
@@ -165,7 +178,7 @@ class ConfigContainer:
             List[FFEICConfig | ScriptsConfig]: A list of configurations specific to preflight scripts.
         """
         return self._config_handler.create_config(
-            configs=scripts.TRANSFORMATIONS,
+            configs=script.TRANSFORMATIONS,
             file_dict=self.get_script_file_dict(),
         )
 
@@ -177,7 +190,7 @@ class ConfigContainer:
             List[FFEICConfig | ScriptsConfig]: A list of configurations specific to preflight scripts.
         """
         return self._config_handler.create_config(
-            configs=scripts.GOV_IDENTIFIERS,
+            configs=script.GOV_IDENTIFIERS,
             file_dict=self.get_script_file_dict(),
         )
 
@@ -189,6 +202,6 @@ class ConfigContainer:
             List[FFEICConfig | ScriptsConfig]: A list of configurations specific to preflight scripts.
         """
         return self._config_handler.create_config(
-            configs=scripts.CALL_REPORTS,
+            configs=script.CALL_REPORTS,
             file_dict=self.get_script_file_dict(),
         )

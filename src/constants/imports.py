@@ -1,25 +1,33 @@
-""" 
-Imports
+"""
+imports 
 
-JSON acts as configuration mechanism for the loading of csvs in the import folder.
-If `allow_import` set to false, it will be skipped in the load process.
+This module defines configuration objects for importing CSV files from the 
+import folder. The configuration is specified in JSON-like dictionaries, 
+which control how each file is processed, including schema, table handling, 
+and filtering.
 
-Note: I would prefer this to be table driven but for simplicity we are defining all the conditions in the code.
+If `allow_import` is set to False, the corresponding file will be skipped 
+during the load process.
+
+Note: While a table-driven approach would be preferable, for simplicity, all 
+conditions are defined in the code.
 
 Keys:
-- key_type: Signals how the filename will be compared with key; prefix == partial comparision for date naming convention; full == as is comparison
-- table_schema: Name of target table schema
-- table_name: Name of target table to be created if not exists
-- if_exists: Action to take if table exists
-- sep: Seperator for reading file e.g., ",", "^"
-- allow_import: Boolean flag for allowing file to be imported
-- cols: List of column names, restricts import to specified list, if empty, import full list
-
+- name: Identifier for the import configuration.
+- key_type: Specifies filename comparison method.
+  - "prefix": Partial match (useful for date-based naming conventions).
+  - "full": Exact match.
+- table_schema: Target schema for the imported data.
+- table_name: Target table for storing imported data; created if it does not exist.
+- if_exists: Action to take if the target table already exists (e.g., "fail", "replace", "append").
+- sep: Delimiter used in the CSV file (e.g., ",", "^").
+- allow_import: Boolean flag indicating whether the file should be imported.
+- cols: List of column names to import. If empty, all columns are included.
 """
 
 from typing import List
 
-from .dicts import FFEICConfig
+from .objects import FFEICConfig
 
 BHCF: List[FFEICConfig] = [
     {

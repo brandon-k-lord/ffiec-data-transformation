@@ -1,13 +1,13 @@
-from .containers.containers import get_dependency_container
+import asyncio
+from .containers import DependencyManager
+from .database import get_postgres_async_shared_db
 
 
-def main():
-    dependencies = get_dependency_container()
-    database = dependencies.database()
-    database.create_transformation_schema()
-    process_registry = dependencies.registry()
-    process_registry.process()
+async def main():
+    registry = DependencyManager.registry()
+    await registry.create_schema()
+    await registry.process()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

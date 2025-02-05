@@ -1,18 +1,31 @@
-""" 
-PREFLIGHT 
-Drops potential duplicated data in case stopped mid proces and rebooted.
-Due to how pandas is `appending` data instead of `failing` or `replacing`.
-This was done for simplicity since all of the csv_attribute files are the same data structure.
+"""
+script
+
+This module defines a structured list of script execution configurations used for data transformation,
+loading, and processing tasks. Each script is categorized based on its function and execution order.
+
+Categories:
+- PREFLIGHT: Ensures no duplicate data before execution.
+- DEPENDENCIES: Creates reusable functions and tables needed for later transformations.
+- ATTRIBUTES: Transforms and loads CSV-based attributes into the production system.
+- RELATIONSHIPS: Processes and loads relationship-based transformations.
+- TRANSFORMATIONS: Handles general data transformations before final loading.
+- GOV_IDENTIFIERS: Loads and transforms government statistical identifiers like FIPS and NAICS codes.
+- CALL_REPORTS: Processes financial call reports and handles cleanup operations.
 
 Keys:
-- filename: key for file comparision
-- description: informational
-- allow_exe: boolean flag for allowing file to be executed
+- name (str): Unique script identifier for execution ordering.
+- description (str): Descriptive metadata explaining the purpose of the script.
+- allow_exe (bool): Flag indicating if execution is permitted.
+
+Each script configuration is stored in a categorized list, ensuring modular execution
+and streamlined dependency management.
+
 """
 
 from typing import List
 
-from .dicts import ScriptsConfig
+from .objects import ScriptsConfig
 
 PREFLIGHT: List[ScriptsConfig] = [
     {
@@ -21,13 +34,6 @@ PREFLIGHT: List[ScriptsConfig] = [
         "allow_exe": True,
     }
 ]
-
-"""  
-SCRIPT_TRANS_LOAD
-This json acts as a configuration mechanism for sequential ordering of script execution.
-There are better ways to do this but this was intended to be quick lightweight solution.
-If `allow_exe` set to Fale, it will be excluded during execution.
-"""
 
 DEPENDENCIES: List[ScriptsConfig] = [
     {

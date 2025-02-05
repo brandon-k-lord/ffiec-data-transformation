@@ -1,9 +1,13 @@
+"""
+handler
+"""
+
 import os
 
 import pprint
 from typing import List
 
-from ..constants.dicts import FFEICConfig, ScriptsConfig
+from ..constants.objects import FFEICConfig, ScriptsConfig
 from ..logger import logger
 
 

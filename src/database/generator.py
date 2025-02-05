@@ -1,11 +1,23 @@
+"""
+generator
+
+This module provides asynchronous database session generators for PostgreSQL.
+
+It defines functions that yield database sessions for use in async operations,
+ensuring proper session management and cleanup.
+"""
+
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..handlers.session import SessionHandler
+from ..containers import DependencyManager
 
 
-async def get_postgres_async_db() -> AsyncGenerator[AsyncSession]:
+_session = DependencyManager.session()
+
+
+async def get_postgres_async_db() -> AsyncGenerator[AsyncSession, Exception]:
     """
     Asynchronously retrieves a new database session from the session factory.
 
@@ -21,7 +33,7 @@ async def get_postgres_async_db() -> AsyncGenerator[AsyncSession]:
             # Use the db session here
             result = await db.execute(query)
     """
-    LocalAsyncSession = SessionHandler.create_postgres_async_session_factory()
+    LocalAsyncSession = _session.create_postgres_async_session_factory()
     async with LocalAsyncSession() as db:
         try:
             yield db
@@ -29,7 +41,7 @@ async def get_postgres_async_db() -> AsyncGenerator[AsyncSession]:
             await db.close()
 
 
-async def get_postgres_async_shared_db() -> AsyncGenerator[AsyncSession]:
+async def get_postgres_async_shared_db() -> AsyncGenerator[AsyncSession, Exception]:
     """
     Asynchronously retrieves a shared database session from the session factory.
 
@@ -45,7 +57,7 @@ async def get_postgres_async_shared_db() -> AsyncGenerator[AsyncSession]:
             # Use the shared db session here
             result = await db.execute(query)
     """
-    LocalAsyncSession = SessionHandler.get_postgres_async_session_factory()
+    LocalAsyncSession = _session.get_postgres_async_session_factory()
     async with LocalAsyncSession() as db:
         try:
             yield db

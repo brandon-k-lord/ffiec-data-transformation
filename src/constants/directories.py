@@ -1,2 +1,0 @@
-IMPORT = "imports"
-SCRIPTS = "scripts"

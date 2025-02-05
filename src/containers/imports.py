@@ -1,27 +1,45 @@
+"""
+imports
+
+This module contains the `ImportContainer` class, which manages different types of data import processes
+by delegating tasks to an import handler. It provides functionality to execute various import processes
+such as BHCF, attributes, relationships, transformations, and government identifiers, using configurations
+provided by the `ConfigContainer` and processing handled by the `ImportHandler`.
+
+Classes:
+    ImportContainer: A container class that manages and executes different types of data imports using
+                     the provided `ImportHandler` and configurations from the `ConfigContainer`.
+Notes:
+    The engine used for executing imports must be passed directly to the `ImportContainer` methods.
+"""
+
 from sqlalchemy import Engine
-from .configs import ConfigContainer
+
+from .config import ConfigContainer
 from ..handlers import ImportHandler
 
 
-# TODO: update documentation that engine must be passed directly
 class ImportContainer:
     """
-    A container class that manages various types of data imports by delegating tasks to an import handler.
+    A container class that manages and executes various types of data imports by delegating tasks to an import handler.
+
+    This class facilitates the execution of different import processes, such as BHCF, attributes, relationships,
+    transformations, and government identifiers. It retrieves import configurations from the `ConfigContainer` and
+    processes them using the `ImportHandler`. The `engine` used for executing imports must be passed to each method
+    explicitly.
 
     Attributes:
-        _config (ConfigContainer): Holds configuration details for different types of imports.
-        _import_handler (ImportHandler): Handles the execution of import operations.
-        _engine (Engine): Database or processing engine used for executing imports.
+        _config (ConfigContainer): Provides configuration details for different types of imports.
+        _import_handler (ImportHandler): Responsible for handling the execution of import operations.
     """
 
     def __init__(self, config: ConfigContainer, import_handler: ImportHandler):
         """
-        Initializes the ImportContainer with configuration, import handler, and processing engine.
+        Initializes the ImportContainer with a configuration container and an import handler.
 
         Args:
-            config (ConfigContainer): The configuration container providing import configurations.
-            import_handler (ImportHandler): The handler responsible for executing imports.
-            engine (Engine): The processing engine used for handling import operations.
+            config (ConfigContainer): The configuration container providing import settings.
+            import_handler (ImportHandler): The handler responsible for executing import operations.
         """
         self._config: ConfigContainer = config
         self._import_handler: ImportHandler = import_handler
@@ -29,7 +47,12 @@ class ImportContainer:
     def bhcf_import(self, engine: Engine) -> None:
         """
         Executes the BHCF (Bank Holding Company Filings) import process.
-        Uses the configurations provided by `bhcf_imports` from the config container.
+
+        This method retrieves configurations from the `bhcf_imports` method of the `ConfigContainer`
+        and processes them using the `ImportHandler`.
+
+        Args:
+            engine (Engine): The database or processing engine used for execution.
         """
         return self._import_handler.import_handler(
             configs=self._config.bhcf_imports(),
@@ -38,8 +61,13 @@ class ImportContainer:
 
     def attribute_import(self, engine: Engine) -> None:
         """
-        Executes the attributes import process.
-        Uses the configurations provided by `attribute_imports` from the config container.
+        Executes the attribute import process.
+
+        This method retrieves configurations from the `attribute_imports` method of the `ConfigContainer`
+        and processes them using the `ImportHandler`.
+
+        Args:
+            engine (Engine): The database or processing engine used for execution.
         """
         return self._import_handler.import_handler(
             configs=self._config.attribute_imports(),
@@ -48,8 +76,13 @@ class ImportContainer:
 
     def relationship_import(self, engine: Engine) -> None:
         """
-        Executes the relationships import process.
-        Uses the configurations provided by `relationship_imports` from the config container.
+        Executes the relationship import process.
+
+        This method retrieves configurations from the `relationship_imports` method of the `ConfigContainer`
+        and processes them using the `ImportHandler`.
+
+        Args:
+            engine (Engine): The database or processing engine used for execution.
         """
         return self._import_handler.import_handler(
             configs=self._config.relationship_imports(),
@@ -58,8 +91,13 @@ class ImportContainer:
 
     def transformation_import(self, engine: Engine) -> None:
         """
-        Executes the transformations import process.
-        Uses the configurations provided by `transformation_imports` from the config container.
+        Executes the transformation import process.
+
+        This method retrieves configurations from the `transformation_imports` method of the `ConfigContainer`
+        and processes them using the `ImportHandler`.
+
+        Args:
+            engine (Engine): The database or processing engine used for execution.
         """
         return self._import_handler.import_handler(
             configs=self._config.transformation_imports(),
@@ -68,8 +106,13 @@ class ImportContainer:
 
     def gov_identifier_import(self, engine: Engine) -> None:
         """
-        Executes the gov_identifiers import process.
-        Uses the configurations provided by `gov_identifier_imports` from the config container.
+        Executes the government identifier import process.
+
+        This method retrieves configurations from the `gov_identifier_imports` method of the `ConfigContainer`
+        and processes them using the `ImportHandler`.
+
+        Args:
+            engine (Engine): The database or processing engine used for execution.
         """
         return self._import_handler.import_handler(
             configs=self._config.gov_identifier_imports(),

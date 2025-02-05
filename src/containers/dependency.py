@@ -88,7 +88,7 @@ class DependencyContainer:
             WorkerContainer: An instance initialized with `ImportContainer` and `ScriptContainer`,
                               allowing concurrent execution of import and script tasks.
         """
-        return WorkerContainer(import_=self.import_(), scripts=self.script())
+        return WorkerContainer(import_=self.import_(), script=self.script())
 
     def registry(self) -> RegistryContainer:
         """

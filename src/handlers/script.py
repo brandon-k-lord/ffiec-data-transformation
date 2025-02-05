@@ -1,6 +1,6 @@
 import logging
-
 from typing import List
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 

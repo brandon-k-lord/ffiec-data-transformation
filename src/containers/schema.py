@@ -8,8 +8,8 @@ schemas asynchronously using SQLAlchemy.
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..handlers import SchemaHandler
 from ..constants import schema
+from ..handlers import SchemaHandler
 
 
 class SchemaContainer:
@@ -47,4 +47,4 @@ class SchemaContainer:
         Returns:
             None
         """
-        return await self._schema_handler.create_table_schema(schema=schema, db=db)
+        await self._schema_handler.create_table_schema(schema=schema, db=db)

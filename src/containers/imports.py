@@ -15,8 +15,8 @@ Notes:
 
 from sqlalchemy import Engine
 
-from .config import ConfigContainer
 from ..handlers import ImportHandler
+from .config import ConfigContainer
 
 
 class ImportContainer:

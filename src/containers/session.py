@@ -16,15 +16,12 @@ The `SessionContainer` class supports:
     - Generating session factories for asynchronous interactions with the database.
 """
 
+from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import Engine, create_engine
-from sqlalchemy.ext.asyncio import (
-    create_async_engine,
-    async_sessionmaker,
-    AsyncEngine,
-)
+from sqlalchemy.ext.asyncio import (AsyncEngine, AsyncSession,
+                                    async_sessionmaker, create_async_engine)
 
 from ..constants import connection
 
@@ -139,6 +136,7 @@ class SessionContainer:
         )
 
     @classmethod
+    @asynccontextmanager
     async def get_postgres_async_db(cls) -> AsyncGenerator[AsyncSession, Exception]:
         """
         Asynchronously retrieves a new database session from the session factory.
@@ -163,6 +161,7 @@ class SessionContainer:
                 await db.close()
 
     @classmethod
+    @asynccontextmanager
     async def get_postgres_async_shared_db(
         cls,
     ) -> AsyncGenerator[AsyncSession, Exception]:

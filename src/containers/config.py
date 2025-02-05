@@ -14,14 +14,10 @@ Classes:
 """
 
 from typing import List
-from ..constants import script
-from ..constants import imports
-from ..constants import directory
+
+from ..constants import directory, imports, script
 from ..constants.objects import FFEICConfig, ScriptsConfig
-
 from ..handlers import ConfigHandler
-
-from typing import List
 
 
 class ConfigContainer:

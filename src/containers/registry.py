@@ -14,9 +14,9 @@ The module ensures proper coordination between workers, session management, and
 asynchronous PostgreSQL database connections, enabling efficient task execution.
 """
 
-from .worker import WorkerContainer
-from .session import SessionContainer
 from .schema import SchemaContainer
+from .session import SessionContainer
+from .worker import WorkerContainer
 
 
 class RegistryContainer:
@@ -63,14 +63,16 @@ class RegistryContainer:
         The workflow ensures that all required dependencies are initialized before
         executing imports and scripts.
         """
-        await self._worker.dependency(db=self._session.get_postgres_async_shared_db())
+        async with self._session.get_postgres_async_shared_db() as shared_async_db:
+            await self._worker.dependency(db=shared_async_db)
         self._worker.import_workers(engine=self._session.create_postgres_engine())
-        self._worker.script_workers(db=self._session.get_postgres_async_db())
+
+        async with self._session.get_postgres_async_db() as async_db:
+            self._worker.script_workers(db=async_db)
 
     async def create_schema(self) -> None:
         """
         Initiates schema creation.
         """
-        await self._schema.create_transformation_schema(
-            db=self._session.get_postgres_async_shared_db()
-        )
+        async with self._session.get_postgres_async_shared_db() as db:
+            await self._schema.create_transformation_schema(db=db)

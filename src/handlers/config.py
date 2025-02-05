@@ -3,7 +3,6 @@ handler
 """
 
 import os
-
 import pprint
 from typing import List
 

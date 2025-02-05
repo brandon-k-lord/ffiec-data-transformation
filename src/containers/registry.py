@@ -66,7 +66,7 @@ class RegistryContainer:
         with self._session.get_postgres_shared_db() as shared_db:
             self._worker.dependency(db=shared_db)
 
-        self._worker.import_workers(engine=self._session.create_postgres_engine())
+        self._worker.import_workers()
 
         with self._session.get_postgres_db() as db:
             self._worker.script_workers(db=db)

@@ -24,8 +24,6 @@ class ConfigHandler:
         """
         wk_dir = os.path.join(os.getcwd(), directory)
 
-        # TODO: We can do this jsut once instead of each time.
-
         return {
             file.lower().split(".")[0]: os.path.join(wk_dir, file)
             for file in os.listdir(path=wk_dir)

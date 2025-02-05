@@ -46,7 +46,7 @@ class ScriptContainer:
         Args:
             db (Session): The synchronous database session.
         """
-        self._script_handler.execute_scripts(
+        return self._script_handler.execute_scripts(
             db=db,
             configs=self._config.preflight_scripts(),
         )
@@ -61,7 +61,7 @@ class ScriptContainer:
         Args:
             db (Session): The synchronous database session.
         """
-        self._script_handler.execute_scripts(
+        return self._script_handler.execute_scripts(
             db=db,
             configs=self._config.dependency_scripts(),
         )
@@ -76,7 +76,7 @@ class ScriptContainer:
         Args:
             db (Session): The synchronous database session.
         """
-        self._script_handler.execute_scripts(
+        return self._script_handler.execute_scripts(
             db=db,
             configs=self._config.attribute_scripts(),
         )
@@ -91,7 +91,7 @@ class ScriptContainer:
         Args:
             db (Session): The synchronous database session.
         """
-        self._script_handler.execute_scripts(
+        return self._script_handler.execute_scripts(
             db=db,
             configs=self._config.relationship_scripts(),
         )
@@ -106,7 +106,7 @@ class ScriptContainer:
         Args:
             db (Session): The synchronous database session.
         """
-        self._script_handler.execute_scripts(
+        return self._script_handler.execute_scripts(
             db=db,
             configs=self._config.transformation_scripts(),
         )
@@ -121,7 +121,7 @@ class ScriptContainer:
         Args:
             db (Session): The synchronous database session.
         """
-        self._script_handler.execute_scripts(
+        return self._script_handler.execute_scripts(
             db=db,
             configs=self._config.gov_identifier_scripts(),
         )
@@ -136,7 +136,7 @@ class ScriptContainer:
         Args:
             db (Session): The synchronous database session.
         """
-        self._script_handler.execute_scripts(
+        return self._script_handler.execute_scripts(
             db=db,
             configs=self._config.call_report_scripts(),
         )

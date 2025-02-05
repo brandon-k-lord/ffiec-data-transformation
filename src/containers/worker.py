@@ -7,12 +7,13 @@ in separate processes using process-based concurrency.
 
 from concurrent.futures import ProcessPoolExecutor
 
-from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
 
 from .imports import ImportContainer
+from ..logger import logger
 from .script import ScriptContainer
+from .session import SessionContainer
 
 
 class WorkerContainer:
@@ -27,7 +28,12 @@ class WorkerContainer:
         _script (ScriptContainer): Handles script execution.
     """
 
-    def __init__(self, import_: ImportContainer, script: ScriptContainer):
+    def __init__(
+        self,
+        import_: ImportContainer,
+        script: ScriptContainer,
+        session: SessionContainer,
+    ):
         """
         Initializes the WorkerContainer with import and script handling containers.
 
@@ -37,6 +43,7 @@ class WorkerContainer:
         """
         self._import: ImportContainer = import_
         self._script: ScriptContainer = script
+        self._session: SessionContainer = session
 
     def dependency(self, db: Session):
         """
@@ -51,37 +58,42 @@ class WorkerContainer:
         self._script.preflight_scripts(db=db)
         self._script.dependency_scripts(db=db)
 
-    def import_workers(self, engine: Engine):
+    def safe_wrapper(self, func):
+        """Creates a fresh DB engine inside each subprocess."""
+        try:
+            logger.info(f"Starting {func.__name__}")
+
+            # Create a new engine inside the subprocess
+            engine = self._session.create_postgres_engine()
+
+            func(engine)  # Use the engine inside the subprocess
+            logger.info(f"Completed {func.__name__}")
+
+        except Exception as e:
+            logger.error(f"Error in {func.__name__}: {e}")
+
+    def import_workers(self):
         """
         Executes import-related tasks concurrently using process-based concurrency.
-
-        The following import methods are executed in parallel:
-            - attribute_import
-            - relationship_import
-            - transformation_import
-            - gov_identifier_import
-            - bhcf_import
 
         Parameters:
             engine (Engine): The SQLAlchemy engine used for database interactions.
         """
-        # with ProcessPoolExecutor() as executor:
-        #     executor.map(
-        #         lambda func, engine=engine: func(engine),
-        #         [
-        #             self._import.attribute_import,
-        #             self._import.relationship_import,
-        #             self._import.transformation_import,
-        #             self._import.gov_identifier_import,
-        #             self._import.bhcf_import,
-        #         ],
-        #     )
 
-        self._import.attribute_import(engine=engine),
-        self._import.relationship_import(engine=engine),
-        self._import.transformation_import(engine=engine),
-        self._import.gov_identifier_import(engine=engine),
-        self._import.bhcf_import(engine=engine),
+        with ProcessPoolExecutor() as exe:
+            futures = [
+                exe.submit(self.safe_wrapper, func)
+                for func in [
+                    self._import.attribute_import,
+                    self._import.relationship_import,
+                    self._import.transformation_import,
+                    self._import.gov_identifier_import,
+                    self._import.bhcf_import,
+                ]
+            ]
+
+            for future in futures:
+                future.result()
 
     def script_workers(self, db: Session):
         """
@@ -97,20 +109,14 @@ class WorkerContainer:
         Parameters:
             db (Session): The asynchronous database session used for script execution.
         """
-        # with ProcessPoolExecutor() as executor:
-        #     executor.map(
-        #         lambda func, db=db: func(db),
-        #         [
-        #             self._script.attribute_scripts,
-        #             self._script.relationship_scripts,
-        #             self._script.transformation_scripts,
-        #             self._script.gov_identifier_scripts,
-        #             self._script.call_report_scripts,
-        #         ],
-        #     )
 
-        self._script.attribute_scripts(db=db),
-        self._script.relationship_scripts(db=db),
-        self._script.transformation_scripts(db=db),
-        self._script.gov_identifier_scripts(db=db),
-        self._script.call_report_scripts(db=db),
+        with ProcessPoolExecutor() as exe:
+            futures = [
+                exe.submit(self._script.attribute_scripts(db=db)),
+                exe.submit(self._script.relationship_scripts(db=db)),
+                exe.submit(self._script.transformation_scripts(db=db)),
+                exe.submit(self._script.gov_identifier_scripts(db=db)),
+                exe.submit(self._script.call_report_scripts(db=db)),
+            ]
+            for future in futures:
+                future.result()

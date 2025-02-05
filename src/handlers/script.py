@@ -73,3 +73,4 @@ class ScriptHandler:
                 logger.info(
                     f"Skipping execution for {config.get('file_path')} due to 'allow_exe' being False"
                 )
+        return True

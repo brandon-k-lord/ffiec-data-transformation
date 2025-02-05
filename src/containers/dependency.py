@@ -12,8 +12,7 @@ Classes:
                          script execution, worker management, schema handling, and session management.
 """
 
-from ..handlers import (ConfigHandler, ImportHandler, SchemaHandler,
-                        ScriptHandler)
+from ..handlers import ConfigHandler, ImportHandler, SchemaHandler, ScriptHandler
 from .config import ConfigContainer
 from .imports import ImportContainer
 from .registry import RegistryContainer
@@ -89,7 +88,9 @@ class DependencyContainer:
             WorkerContainer: An instance initialized with `ImportContainer` and `ScriptContainer`,
                               allowing concurrent execution of import and script tasks.
         """
-        return WorkerContainer(import_=self.import_(), script=self.script())
+        return WorkerContainer(
+            import_=self.import_(), script=self.script(), session=self.session()
+        )
 
     def registry(self) -> RegistryContainer:
         """

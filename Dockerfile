@@ -1,6 +1,6 @@
 FROM python:3.12.7
 
-WORKDIR /
+WORKDIR /usr/app/
 
 COPY requirements.txt ./
 
@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "main.py"]
+CMD ["python","-m", "src.main"]

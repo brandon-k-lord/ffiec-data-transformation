@@ -133,5 +133,3 @@ transformation_cd int null,
 acct_method varchar(100) null,
 acct_method_cd int null
 ) ;
-
-

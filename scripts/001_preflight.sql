@@ -1,5 +1,6 @@
 drop table if exists transformations.tmp_addresses;
 drop table if exists transformations.tmp_attributes;
+drop table if exists transformations.tmp_bhcf;
 drop table if exists transformations.tmp_cds;
 drop table if exists transformations.tmp_codes;
 drop table if exists transformations.tmp_country_codes;
